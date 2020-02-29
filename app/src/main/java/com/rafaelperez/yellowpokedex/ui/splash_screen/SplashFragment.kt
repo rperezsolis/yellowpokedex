@@ -20,9 +20,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass.
- */
 class SplashFragment : Fragment() {
 
     private lateinit var viewModel: SplashViewModel
@@ -43,5 +40,4 @@ class SplashFragment : Fragment() {
 
         return binding.root
     }
-
 }

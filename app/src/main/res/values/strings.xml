@@ -6,4 +6,10 @@
 
     <!-- Splash Screen -->
     <string name="splash_screen_title">Yellow\nPokédex</string>
+
+    <!-- Login -->
+    <string name="login_title">Yellow\nPokédex</string>
+    <string name="username_field">email</string>
+    <string name="password">password</string>
+    <string name="login_button">Sign in</string>
 </resources>
