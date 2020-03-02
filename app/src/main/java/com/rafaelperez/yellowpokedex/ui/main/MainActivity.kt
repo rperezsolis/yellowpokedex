@@ -2,6 +2,7 @@ package com.rafaelperez.yellowpokedex.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
 import androidx.navigation.findNavController
@@ -21,5 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.setLoggedValue(args.logged)
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }
