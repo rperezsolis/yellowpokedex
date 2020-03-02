@@ -6,27 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.rafaelperez.yellowpokedex.R
+import com.rafaelperez.yellowpokedex.viewmodels.MainViewModel
 
 /**
  * A simple [Fragment] subclass.
  */
 class PokedexFragment : Fragment() {
 
-    private val args by navArgs<PokedexFragmentArgs>()
+    private lateinit var sharedViewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_pokedex, container, false)
-    }
+        sharedViewModel = activity?.run {
+            ViewModelProvider(this).get(MainViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if(!args.logged) {
+        if(!sharedViewModel.logged) {
             findNavController().navigate(PokedexFragmentDirections.actionPokedexFragmentToLoginFragment())
-        } else {
-            Toast.makeText(context, "${args.logged} from main view", Toast.LENGTH_LONG).show()
         }
+
+        return inflater.inflate(R.layout.fragment_pokedex, container, false)
     }
 }

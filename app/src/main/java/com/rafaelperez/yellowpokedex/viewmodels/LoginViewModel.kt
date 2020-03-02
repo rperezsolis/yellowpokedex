@@ -1,11 +1,8 @@
 package com.rafaelperez.yellowpokedex.viewmodels
 
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rafaelperez.yellowpokedex.domain.Credential
 
 class LoginViewModel : ViewModel() {
     private var _signingIn = MutableLiveData<Boolean>()
@@ -16,6 +13,10 @@ class LoginViewModel : ViewModel() {
     val goToMainView: LiveData<Boolean>
         get() = _goToMainView
 
+    private var _saveLoggedState = MutableLiveData<Boolean>()
+    val saveLoggedState: LiveData<Boolean>
+        get() = _saveLoggedState
+
     private var _userEmail = ""
     private var _password = ""
     private val validEmail = "ashketchum@pokemon.com"
@@ -24,6 +25,7 @@ class LoginViewModel : ViewModel() {
     init {
         _signingIn.value = false
         _goToMainView.value = false
+        _saveLoggedState.value = false
     }
 
     fun signIn() {
@@ -33,17 +35,21 @@ class LoginViewModel : ViewModel() {
     fun setUserCredentials(email: String, password: String) {
         _userEmail = email
         _password = password
+        authenticate()
     }
 
     //todo: save in sharedpreferences a boolean which indicates that the user is already logged
-    fun authenticate() {
+    private fun authenticate() {
         if (_userEmail==validEmail && _password==validPassword) {
+            _saveLoggedState.value = true
             _goToMainView.value = true
+            resetState()
         }
     }
 
-    fun resetState() {
+    private fun resetState() {
         _signingIn.value = false
+        _saveLoggedState.value = false
         _goToMainView.value = false
     }
 }
