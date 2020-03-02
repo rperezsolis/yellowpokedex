@@ -1,9 +1,11 @@
 package com.rafaelperez.yellowpokedex.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -28,9 +30,16 @@ class PokedexFragment : Fragment() {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        if(!sharedViewModel.logged) {
-            findNavController().navigate(PokedexFragmentDirections.actionPokedexFragmentToLoginFragment())
+        if(!sharedViewModel.logged.value!!) {
+            goToLogin()
         }
+
+        sharedViewModel.logged.observe(viewLifecycleOwner, Observer {
+            if (!it) {
+                saveLoggedStatus(it)
+                goToLogin()
+            }
+        })
 
         return inflater.inflate(R.layout.fragment_pokedex, container, false)
     }
@@ -43,10 +52,22 @@ class PokedexFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout -> {
-                //todo: logout and navigate to login form
+                sharedViewModel.logout()
                 super.onOptionsItemSelected(item)
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun goToLogin() {
+        findNavController().navigate(PokedexFragmentDirections.actionPokedexFragmentToLoginFragment())
+    }
+
+    private fun saveLoggedStatus(logged: Boolean) {
+        val sharedPref = activity?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putBoolean(getString(R.string.logged_status_key), logged)
+            apply()
         }
     }
 }
