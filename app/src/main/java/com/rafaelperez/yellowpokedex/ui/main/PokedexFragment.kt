@@ -12,11 +12,11 @@ import androidx.navigation.fragment.navArgs
 
 import com.rafaelperez.yellowpokedex.R
 import com.rafaelperez.yellowpokedex.viewmodels.MainViewModel
+import com.rafaelperez.yellowpokedex.viewmodels.PokedexViewModel
 
-/**
- * A simple [Fragment] subclass.
- */
 class PokedexFragment : Fragment() {
+
+    private lateinit var viewModel: PokedexViewModel
 
     private lateinit var sharedViewModel: MainViewModel
 
@@ -40,6 +40,8 @@ class PokedexFragment : Fragment() {
                 goToLogin()
             }
         })
+
+        viewModel = ViewModelProvider(this).get(PokedexViewModel::class.java)
 
         return inflater.inflate(R.layout.fragment_pokedex, container, false)
     }
