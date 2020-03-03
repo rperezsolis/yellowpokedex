@@ -5,20 +5,31 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.rafaelperez.yellowpokedex.R
+import com.rafaelperez.yellowpokedex.databinding.FragmentPokedexBinding
 import com.rafaelperez.yellowpokedex.viewmodels.MainViewModel
 import com.rafaelperez.yellowpokedex.viewmodels.PokedexViewModel
 
 class PokedexFragment : Fragment() {
 
-    private lateinit var viewModel: PokedexViewModel
-
     private lateinit var sharedViewModel: MainViewModel
+
+    private val viewModel: PokedexViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onActivityCreated()"
+        }
+        ViewModelProvider(this, PokedexViewModel.Factory(activity.application)).get(PokedexViewModel::class.java)
+    }
+
+    private lateinit var viewModelAdapter: PokedexAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -29,11 +40,9 @@ class PokedexFragment : Fragment() {
         sharedViewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-
         if(!sharedViewModel.logged.value!!) {
             goToLogin()
         }
-
         sharedViewModel.logged.observe(viewLifecycleOwner, Observer {
             if (!it) {
                 saveLoggedStatus(it)
@@ -41,9 +50,25 @@ class PokedexFragment : Fragment() {
             }
         })
 
-        viewModel = ViewModelProvider(this).get(PokedexViewModel::class.java)
+        val binding: FragmentPokedexBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pokedex, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
-        return inflater.inflate(R.layout.fragment_pokedex, container, false)
+        viewModelAdapter = PokedexAdapter()
+
+        binding.root.findViewById<RecyclerView>(R.id.recycler_view).apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = viewModelAdapter
+        }
+
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.pokemons.observe(viewLifecycleOwner, Observer {
+            viewModelAdapter.pokemons = it
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
