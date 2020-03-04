@@ -4,8 +4,11 @@ import com.rafaelperez.yellowpokedex.database.entities.PokemonEntity
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class NetworkPokemonContainer(
-    val results: List<PokemonDTO>
+data class NetworkPokemonContainer (
+    val count : Int,
+    val next : String?,
+    val previous : String?,
+    val results : List<PokemonDTO>
 )
 
 @JsonClass(generateAdapter = true)

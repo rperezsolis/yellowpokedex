@@ -6,7 +6,7 @@ import com.rafaelperez.yellowpokedex.domain.Pokemon
 
 @Entity
 data class PokemonEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int,
     val name: String,
     val thumbnailUrl: String
