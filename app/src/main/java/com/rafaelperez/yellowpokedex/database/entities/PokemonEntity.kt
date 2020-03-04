@@ -16,7 +16,7 @@ fun List<PokemonEntity>.asDomainModel(): List<Pokemon> {
     return map {
         Pokemon(
             number = it.id.toString(),
-            name = it.name,
+            name = it.name.capitalize(),
             thumbnailUrl = it.thumbnailUrl
         )
     }

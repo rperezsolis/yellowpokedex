@@ -18,4 +18,8 @@
     <!-- Logout -->
     <string name="logout_menu_option">Logout</string>
 
+    <!-- Pokedex -->
+    <string name="number_format">Number: %s</string>
+    <string name="name_format">Name: %s</string>
+
 </resources>
