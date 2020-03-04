@@ -40,26 +40,27 @@ class PokedexFragment : Fragment() {
         sharedViewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
+
+        val binding: FragmentPokedexBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pokedex, container, false)
+
         if(!sharedViewModel.logged.value!!) {
             goToLogin()
+        } else {
+            binding.lifecycleOwner = viewLifecycleOwner
+            binding.viewModel = viewModel
+            viewModelAdapter = PokedexAdapter()
+            binding.root.findViewById<RecyclerView>(R.id.recycler_view).apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = viewModelAdapter
+            }
         }
+
         sharedViewModel.logged.observe(viewLifecycleOwner, Observer {
             if (!it) {
                 saveLoggedStatus(it)
                 goToLogin()
             }
         })
-
-        val binding: FragmentPokedexBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pokedex, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-
-        viewModelAdapter = PokedexAdapter()
-
-        binding.root.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = viewModelAdapter
-        }
 
         return binding.root
     }
