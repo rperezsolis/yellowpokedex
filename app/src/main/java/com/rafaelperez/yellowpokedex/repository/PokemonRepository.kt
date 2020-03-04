@@ -1,7 +1,7 @@
 package com.rafaelperez.yellowpokedex.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
 import com.rafaelperez.yellowpokedex.database.PokemonsDatabase
 import com.rafaelperez.yellowpokedex.database.entities.asDomainModel
 import com.rafaelperez.yellowpokedex.domain.Pokemon
@@ -13,9 +13,11 @@ import kotlinx.coroutines.withContext
 
 class PokemonRepository(private  val database: PokemonsDatabase) {
 
-    val pokemons: LiveData<List<Pokemon>> = Transformations.map(database.pokemonDao.getPokemons()) {
+    private val dataSourceFactory: DataSource.Factory<Int, Pokemon> = database.pokemonDao.getPokemons().map() {
         it.asDomainModel()
     }
+
+    val pokemons = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
 
     suspend fun refreshPokemons() {
         withContext(Dispatchers.IO) {
@@ -26,5 +28,9 @@ class PokemonRepository(private  val database: PokemonsDatabase) {
 
             database.pokemonDao.insertAll(*pokemonsDetails.asDatabaseModel())
         }
+    }
+
+    companion object {
+        private const val DATABASE_PAGE_SIZE = 20
     }
 }

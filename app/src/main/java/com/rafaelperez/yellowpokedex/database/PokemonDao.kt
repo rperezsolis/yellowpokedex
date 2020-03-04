@@ -1,6 +1,7 @@
 package com.rafaelperez.yellowpokedex.database
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,7 +12,7 @@ import com.rafaelperez.yellowpokedex.database.entities.PokemonEntity
 interface PokemonDao {
 
     @Query("select * from pokemonentity")
-    fun getPokemons(): LiveData<List<PokemonEntity>>
+    fun getPokemons(): DataSource.Factory<Int, PokemonEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg pokemons: PokemonEntity)

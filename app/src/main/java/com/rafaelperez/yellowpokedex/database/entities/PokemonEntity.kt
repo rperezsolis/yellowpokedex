@@ -12,14 +12,12 @@ data class PokemonEntity(
     val thumbnailUrl: String
 )
 
-fun List<PokemonEntity>.asDomainModel(): List<Pokemon> {
-    return map {
-        Pokemon(
-            number = it.id.toString(),
-            name = it.name.capitalize(),
-            thumbnailUrl = it.thumbnailUrl
+fun PokemonEntity.asDomainModel(): Pokemon {
+    return Pokemon(
+            number = id.toString(),
+            name = name.capitalize(),
+            thumbnailUrl = thumbnailUrl
         )
-    }
 }
 
 

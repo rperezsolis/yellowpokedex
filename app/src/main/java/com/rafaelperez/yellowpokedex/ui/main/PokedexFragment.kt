@@ -68,7 +68,7 @@ class PokedexFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.pokemons.observe(viewLifecycleOwner, Observer {
-            viewModelAdapter.pokemons = it
+            viewModelAdapter.submitList(it)
         })
     }
 
