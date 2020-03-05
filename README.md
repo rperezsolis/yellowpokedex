@@ -1,6 +1,6 @@
 # Android Pokedex
 
-###Description
+### Description
 
 The project simulates a login-flow that give you access to the "Pokedex", which is a RecyclerView that shows a list of all the pokemons retrieved by the [PokéApi](https://pokeapi.co/).
 
@@ -10,7 +10,7 @@ To handle the network requests the [Retrofit](https://square.github.io/retrofit/
 
 The project also uses [Glide](https://github.com/bumptech/glide), an image loading and caching library for android.
 
-####Follow the next instructions to run the application:
+#### Follow the next instructions to run the application:
 
 - Download the project as a zip (be sure that you are in the master branch) and paste it in a location of your preference. 
 - Unzip de project.
