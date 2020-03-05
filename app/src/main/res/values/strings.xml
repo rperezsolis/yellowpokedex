@@ -1,14 +1,11 @@
 <resources>
-    <string name="app_name">Yellow Pokedex</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Android Pokedex</string>
 
     <!-- Splash Screen -->
-    <string name="splash_screen_title">Yellow\nPokédex</string>
+    <string name="splash_screen_title">Android\nPokédex</string>
 
     <!-- Login -->
-    <string name="login_title">Yellow\nPokédex</string>
+    <string name="login_title">Android\nPokédex</string>
     <string name="username_field">email</string>
     <string name="password">password</string>
     <string name="login_button">Sign in</string>
