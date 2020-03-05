@@ -19,6 +19,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
 
     private val database = getDatabase(application)
     private val repository = PokemonRepository(database)
+    val errorMessage = repository.errorMessage
 
     val pokemons: LiveData<PagedList<Pokemon>> = repository.pokemons.build()
 

@@ -70,6 +70,12 @@ class PokedexFragment : Fragment() {
         viewModel.pokemons.observe(viewLifecycleOwner, Observer {
             viewModelAdapter.submitList(it)
         })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+            if (it!=null && it.isNotEmpty()) {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
