@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
 import com.rafaelperez.yellowpokedex.database.getDatabase
 import com.rafaelperez.yellowpokedex.domain.Pokemon
+import com.rafaelperez.yellowpokedex.repository.PokemonBoundaryCallback
 import com.rafaelperez.yellowpokedex.repository.PokemonRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,16 +17,8 @@ import kotlinx.coroutines.launch
 
 class PokedexViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val viewModelJob = SupervisorJob()
-    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private val database = getDatabase(application)
     private val repository = PokemonRepository(database)
-
-    init {
-        viewModelScope.launch {
-            repository.refreshPokemons()
-        }
-    }
 
     val pokemons: LiveData<PagedList<Pokemon>> = repository.pokemons.build()
 

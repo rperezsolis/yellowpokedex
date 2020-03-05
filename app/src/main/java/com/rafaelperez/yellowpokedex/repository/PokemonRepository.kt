@@ -13,15 +13,34 @@ import kotlinx.coroutines.withContext
 
 class PokemonRepository(private  val database: PokemonsDatabase) {
 
-    private val dataSourceFactory: DataSource.Factory<Int, Pokemon> = database.pokemonDao.getPokemons().map() {
+    private val dataSourceFactory: DataSource.Factory<Int, Pokemon> = database.pokemonDao.getPokemons().map {
         it.asDomainModel()
     }
 
-    val pokemons = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+    private val boundaryCallback = PokemonBoundaryCallback(this)
+
+    val pokemons = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE).setBoundaryCallback(boundaryCallback)
+
+    private var newPageInfo: String
+
+    init {
+        newPageInfo = ""
+    }
 
     suspend fun refreshPokemons() {
         withContext(Dispatchers.IO) {
-            val pokemons = Network.pokemonServiceImpl.getPokemons().await()
+            val pageInfo = newPageInfo
+            val offset = if (pageInfo.isNotEmpty()) {
+                pageInfo.substringAfter("offset=").substringBefore("&limit=").toInt()
+            } else {
+                0
+            }
+            val pokemons = Network.pokemonServiceImpl.getPokemons(offset, DATABASE_PAGE_SIZE).await()
+            newPageInfo = if (pokemons.next!=null) {
+                pokemons.next.substring(34)
+            } else {
+                ""
+            }
             val pokemonsDetails = pokemons.results.map {
                 return@map Network.pokemonDetailServiceImpl.getPokemonDetail(it.url.substring(26))
             }.awaitAll()

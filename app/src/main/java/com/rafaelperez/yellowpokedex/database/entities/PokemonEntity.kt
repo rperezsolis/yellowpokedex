@@ -9,14 +9,14 @@ data class PokemonEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    val thumbnailUrl: String
+    val thumbnailUrl: String?
 )
 
 fun PokemonEntity.asDomainModel(): Pokemon {
     return Pokemon(
             number = id.toString(),
             name = name.capitalize(),
-            thumbnailUrl = thumbnailUrl
+            thumbnailUrl = thumbnailUrl ?: ""
         )
 }
 

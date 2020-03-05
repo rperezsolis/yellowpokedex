@@ -1,6 +1,5 @@
 package com.rafaelperez.yellowpokedex.database
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
